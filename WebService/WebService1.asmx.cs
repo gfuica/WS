@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using Npgsql;
-
-namespace WebService
+ 
+namespace WebApplication2
 {
     /// <summary>
     /// Descripción breve de WebService1
@@ -17,9 +17,9 @@ namespace WebService
     // [System.Web.Script.Services.ScriptService]
     public class WebService1 : System.Web.Services.WebService
     {
-
-        [WebMethod]
-        public Restaurantes[] ListaRestaurant()
+          
+        [WebMethod] //atributo permite que el método pueda ser llamado desde clientes web remotos, en este caso desde la aplicación Android
+        public Restaurantes[] ListaRestaurant()  // método permite recuperar datos desde una BD remota, agregándolos a una lista para luego retornarla como array en formato XML
         {
 
             using (var con = new NpgsqlConnection("Server=plop.inf.udec.cl;Port=5432;Database=cristobmunoz;User Id=cristobmunoz;Password=V24qe5;"))
@@ -27,9 +27,9 @@ namespace WebService
                 NpgsqlCommand cmd = new NpgsqlCommand();
                 cmd.Connection = con;
                 con.Open();
-                cmd.CommandText = "SELECT id_restaurante, nombre, direccion, telefono, valoracion_r, tipo_r, foto, rut_a, id_horario FROM restclopedia.restaurante";
+                cmd.CommandText = "SELECT id_restaurante, nombre, direccion, telefono, valoracion_r, tipo_r, foto, rut_a, id_horario, discapacitados FROM restclopedia.restaurante";
 
-                NpgsqlDataReader dataReader = cmd.ExecuteReader();
+                NpgsqlDataReader dataReader = cmd.ExecuteReader(); 
 
                 List<Restaurantes> lista = new List<Restaurantes>();
 
@@ -44,8 +44,10 @@ namespace WebService
                                     dataReader.GetString(5),
                                     dataReader.GetString(6),
                                     dataReader.GetString(7),
-                                    dataReader.GetInt32(8)
-                                    ));
+                                    dataReader.GetInt32(8),
+
+                                    Convert.ToInt32(dataReader.GetBoolean(9))
+                                    )); 
                 }
 
                 con.Close();
@@ -56,32 +58,10 @@ namespace WebService
 
 
         }
+        
+        
+        
 
-        [WebMethod]
-        public int NuevoClienteSimple(string nombre, string telefono)
-        {
-
-            using (var con = new NpgsqlConnection("Server=bdd.inf.udec.cl;Port=5432;Database=bdi2018d;User Id=bdi2018d;Password=bdi2018d;"))
-            {
-                NpgsqlCommand cmd = new NpgsqlCommand();
-                cmd.Connection = con;
-                con.Open();
-                cmd.CommandText = "Insert into test.dbclientes values(@id_cliente, @nombre, @telefono)";
-                cmd.Parameters.Add(new NpgsqlParameter("@id_cliente", System.Data.SqlDbType.Int)).Value = 0;
-                cmd.Parameters.Add(new NpgsqlParameter("@telefono", System.Data.SqlDbType.NVarChar)).Value = telefono;
-                cmd.Parameters.Add(new NpgsqlParameter("@nombre", System.Data.SqlDbType.NVarChar)).Value = nombre;
-
-
-                int res = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-
-                return res;
-            }
-
-
-
-        }
-
-
+        
     }
 }

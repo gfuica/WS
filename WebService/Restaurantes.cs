@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebService
+//esta clase permite implementar los 
+
+namespace WebApplication2
 {
     public class Restaurantes
     {
@@ -16,6 +18,7 @@ namespace WebService
         public string foto { get; set; }
         public string rut_a { get; set; }
         public int id_horario { get; set; }
+        public int discapacitados { get; set; }
 
 
 
@@ -30,9 +33,10 @@ namespace WebService
             this.foto = "";
             this.rut_a = "";
             this.id_horario = 0;
+            this.discapacitados = 0;
         }
 
-        public Restaurantes(int id_restaurante, string nombre, string direccion, int telefono, int valoracion_r, string tipo_r, string foto, string rut_a, int id_horario)
+        public Restaurantes(int id_restaurante, string nombre, string direccion, int telefono,  int valoracion_r, string tipo_r, string foto, string rut_a, int id_horario,int discapacitados)
         {
             this.id_restaurante = id_restaurante; //0
             this.nombre = nombre;
@@ -43,6 +47,7 @@ namespace WebService
             this.foto = foto;
             this.rut_a = rut_a;
             this.id_horario = id_horario;
+            this.discapacitados = discapacitados;
         }
     }
 }
